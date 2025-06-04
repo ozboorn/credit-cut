@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magic 8-Ball Decision Maker</title>
+    <style>
+        body {
+            font-family: monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #1a1a2e;
+            color: #ffffff;
+        }
+        
+        .container {
+            text-align: center;
+            perspective: 1000px;
+        }
+        
+        .eight-ball {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #444, #000);
+            position: relative;
+            margin: 0 auto 30px;
+            box-shadow: 0 0 20px rgba(153, 50, 204, 0.3);
+            transition: transform 0.3s ease;
+        }
+        
+        .window {
+            width: 120px;
+            height: 120px;
+            background-color: #9c27b0;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .triangle {
+            width: 0;
+            height: 0;
+            border-left: 40px solid transparent;
+            border-right: 40px solid transparent;
+            border-bottom: 80px solid #6a1b9a;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .answer {
+            position: relative;
+            color: white;
+            font-size: 0;
+            font-weight: bold;
+            text-align: center;
+            opacity: 0;
+            transition: font-size 0.5s, opacity 0.5s;
+            z-index: 2;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            padding: 0 10px;
+            font-family: monospace;
+        }
+        
+        .answer.visible {
+            font-size: 16px;
+            opacity: 1;
+        }
+        
+        .triangle.visible {
+            opacity: 1;
+        }
+        
+        .decision-button {
+            background-color: #9c27b0;
+            border: none;
+            color: #ffffff;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-family: monospace;
+            font-size: 16px;
+            margin: 20px 0;
+            cursor: pointer;
+            border-radius: 30px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 8px rgba(153, 50, 204, 0.3);
+        }
+        
+        .decision-button:hover {
+            background-color: #7b1fa2;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(153, 50, 204, 0.4);
+        }
+        
+        .decision-button:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 4px rgba(153, 50, 204, 0.2);
+        }
+        
+        .shake {
+            animation: shake 0.5s;
+        }
+        
+        @keyframes shake {
+            0% { transform: rotate(0deg); }
+            10% { transform: rotate(-5deg); }
+            20% { transform: rotate(5deg); }
+            30% { transform: rotate(-5deg); }
+            40% { transform: rotate(5deg); }
+            50% { transform: rotate(-5deg); }
+            60% { transform: rotate(5deg); }
+            70% { transform: rotate(-5deg); }
+            80% { transform: rotate(5deg); }
+            90% { transform: rotate(-5deg); }
+            100% { transform: rotate(0deg); }
+        }
+        
+        .eight {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 100px;
+            color: white;
+            opacity: 0.2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="eight-ball">
+            <div class="eight">8</div>
+            <div class="window">
+                <div class="triangle"></div>
+                <div class="answer"></div>
+            </div>
+        </div>
+        <button class="decision-button">Make a Decision</button>
+    </div>
+
+    <script>
+        // Get DOM elements
+        const eightBall = document.querySelector('.eight-ball');
+        const answer = document.querySelector('.answer');
+        const triangle = document.querySelector('.triangle');
+        const decisionButton = document.querySelector('.decision-button');
+        
+        // Your custom decision answers
+        const answers = [
+            "eh prolly stay",
+            "stay.",
+            "id stay n wait",
+            "stayuhhh",
+            "raiiise it",
+            "sure give a raise",
+            "damn. raise ig.",
+            "they gotta get their $ up. slash",
+            "SLASH THAT MF",
+            "def lower",
+            "cut it for the laughs"
+        ];
+        
+        // Function to get a random answer
+        function getRandomAnswer() {
+            const randomIndex = Math.floor(Math.random() * answers.length);
+            return answers[randomIndex];
+        }
+        
+        // Function to show the answer
+        function showAnswer() {
+            // Hide previous answer and triangle
+            answer.classList.remove('visible');
+            triangle.classList.remove('visible');
+            
+            // Add shake animation to the 8-ball
+            eightBall.classList.add('shake');
+            
+            // Wait for animation to complete
+            setTimeout(() => {
+                // Get random answer
+                const randomAnswer = getRandomAnswer();
+                
+                // Set answer text
+                answer.textContent = randomAnswer;
+                
+                // Show answer and triangle
+                answer.classList.add('visible');
+                triangle.classList.add('visible');
+                
+                // Remove shake animation
+                eightBall.classList.remove('shake');
+            }, 500);
+        }
+        
+        // Add click event listener to the decision button
+        decisionButton.addEventListener('click', showAnswer);
+    </script>
+</body>
+</html>
